@@ -49,9 +49,10 @@ def main():
     for idx,panel in enumerate(cfg['panels']):
         ws=wb.create_sheet(f'Panel {idx+1}');ws.append(['Model','Estimated F1']); subset=[r for r in rows if r[0]==panel['name']]
         for row in subset:ws.append([row[1],row[4]])
-        chart=BarChart();chart.title=panel['name'];chart.y_axis.title='F1 score';chart.add_data(Reference(ws,min_col=2,min_row=1,max_row=ws.max_row),titles_from_data=True);chart.set_categories(Reference(ws,min_col=1,min_row=2,max_row=ws.max_row));ws.add_chart(chart,'D2')
+        chart=BarChart();chart.title=panel['name'];chart.y_axis.title='F1 score';chart.x_axis.delete=False;chart.y_axis.delete=False;chart.x_axis.tickLblPos='nextTo';chart.y_axis.tickLblPos='nextTo';chart.add_data(Reference(ws,min_col=2,min_row=1,max_row=ws.max_row),titles_from_data=True);chart.set_categories(Reference(ws,min_col=1,min_row=2,max_row=ws.max_row));ws.add_chart(chart,'D2')
         ax=axs[0,idx];ax.bar([r[1] for r in subset],[r[4] for r in subset],color=['#acafaf']*(len(subset)-1)+['#438654']);ax.set_ylim(0,1.05);ax.set_title(panel['name']);ax.set_ylabel('F1 score');ax.tick_params(axis='x',labelrotation=55)
     fig.tight_layout();fig.savefig(out/'bars.png',dpi=160);fig.savefig(out/'bars.svg');wb.save(out/'editable_data.xlsx')
     print(f'{len(rows)} bars written to {out}')
 if __name__=='__main__': main()
+
 
